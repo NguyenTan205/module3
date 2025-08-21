@@ -1,0 +1,23 @@
+h1, h2 {
+    color: red;
+    font-size: 200%;
+    font-family: Tahoma,sans-serif;
+    text-align: center;
+    border-bottom: 2px solid black;
+    display: block;
+    width: 100%;   /* kéo hết chiều ngang */
+}
+a {
+    color: blue;
+    font-size: 120%;
+    text-decoration: none;
+    padding: 10px;
+    font-family: Arial, serif;
+}
+p {
+    text-align: justify;
+    text-indent: 30px;
+    line-height: 1.6;
+    font-family: Arial, serif;
+    font-size: 120%;
+}
