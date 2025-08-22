@@ -1,15 +1,15 @@
-body {
+body{
     font-family: Arial, serif;
 }
-#menu, #menu ul, #menu li {
+#menu, #menu ul, #menu li{
     padding: 0;
     margin: 0;
 }
-#menu li {
+#menu li{
     list-style: none;
     position: relative;
     height: 30px;
-    width: 100%;
+    width: 100px;
     padding: 0 20px;
     background-color: black;
     line-height: 30px;
