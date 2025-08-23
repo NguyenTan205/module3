@@ -1,0 +1,101 @@
+#header {
+    width: 100%;
+    height: 60px;
+    background-color: darkgray;
+
+    display: flex; /* dùng flex để xếp logo + menu ngang */
+    justify-content: space-between;
+    align-items: center; /* căn giữa dọc */
+    padding: 0 20px; /* cách lề trái phải */
+}
+
+#logo img {
+    height: 40px; /* chỉnh chiều cao logo để vừa header */
+}
+
+#header-link {
+    width: 100%;
+    height: 30px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
+
+    display: flex;
+    justify-content: center; /* căn giữa ngang */
+    align-items: center; /* căn giữa dọc */
+}
+
+#header-link ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#header-link li {
+    list-style: none;
+    margin: 0 8px; /* khoảng cách giữa các link */
+    display: inline-flex; /* để text và dấu | cùng dòng */
+    align-items: center; /* căn giữa dọc */
+}
+
+#header-link li a, #left-content a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    font-size: 120%;
+    font-family: Arial, sans-serif;
+}
+
+#header-link li a:hover {
+    color: #f05a28;
+}
+
+/* Thêm dấu '|' ngăn cách */
+#header-link li::after {
+    content: "|";
+    margin-left: 8px;
+    color: #555;
+    font-size: 120%; /* cùng cỡ chữ */
+    line-height: 1; /* đảm bảo không bị lệch dòng */
+    display: inline; /* giữ cùng dòng */
+}
+
+/* Bỏ dấu '|' cuối cùng */
+#header-link li:last-child::after {
+    content: "";
+}
+
+#left-content {
+    width: 35%;
+    height: 700px;
+    background-color: #cccccc;
+    margin-top: 10px;
+    float: left;
+}
+
+#item1, #item2, #item3, #item4, #item5 {
+    padding: 10px 10px 10px 10px;
+}
+
+#right-content {
+    width: 65%;
+    height: 700px;
+    background-color: whitesmoke;
+    margin-top: 10px;
+    float: left;
+}
+
+#right-content p {
+    font-size: 120%;
+    font-family: Arial, sans-serif;
+    text-indent: 10px;
+    line-height: 1.6;
+}
+
+#footer {
+    width: 100%;
+    height: 60px;
+    background-color: darkgray;
+    clear: both;
+    padding-top: 5px;
+}
+
