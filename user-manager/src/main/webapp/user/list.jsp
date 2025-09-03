@@ -7,7 +7,8 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %><html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
 <head>
     <title>User Management Application</title>
 </head>
@@ -18,7 +19,22 @@
         <a href="${pageContext.request.contextPath}/users?action=create">Add New User</a>
     </h2>
 </center>
+
 <div align="center">
+
+    <!-- Form tìm kiếm theo country -->
+    <form action="${pageContext.request.contextPath}/users" method="get">
+        <input type="hidden" name="action" value="search"/>
+        <label>Search by Country:</label>
+        <input type="text" name="country" value="${param.country}"/>
+        <input type="submit" value="Search"/>
+    </form>
+
+    <!-- Link sắp xếp theo name -->
+    <p>
+        <a href="${pageContext.request.contextPath}/users?action=sort">Sort by Name</a>
+    </p>
+
     <table border="1" cellpadding="5">
         <caption><h2>List of Users</h2></caption>
         <tr>

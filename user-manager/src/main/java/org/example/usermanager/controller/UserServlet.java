@@ -57,6 +57,12 @@ public class UserServlet extends HttpServlet {
                 case "delete":
                     deleteUser(req, resp);
                     break;
+                case "search":
+                    searchByCountry(req, resp);
+                    break;
+                case "sort":
+                    sortByName(req, resp);
+                    break;
                 default:
                     listUser(req, resp);
                     break;
@@ -73,9 +79,10 @@ public class UserServlet extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-    private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(req.getParameter("id"));
-        User existingUser = userDAO.selectUser(id);
+//        User existingUser = userDAO.selectUser(id);
+        User existingUser = userDAO.getUserById(id);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/edit.jsp");
         req.setAttribute("user", existingUser);
         dispatcher.forward(req, resp);
@@ -91,7 +98,8 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         String country = req.getParameter("country");
         User newUser = new User(name, email, country);
-        userDAO.insertUser(newUser);
+//        userDAO.insertUser(newUser);
+        userDAO.insertUserStore(newUser);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         dispatcher.forward(req, resp);
     }
@@ -113,6 +121,21 @@ public class UserServlet extends HttpServlet {
         userDAO.deleteUser(id);
 
         List<User> listUser = userDAO.selectAllUsers();
+        req.setAttribute("listUser", listUser);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
+        dispatcher.forward(req, resp);
+    }
+
+    private void searchByCountry(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
+        String country = req.getParameter("country");
+        List<User> listUser = userDAO.searchByCountry(country);
+        req.setAttribute("listUser", listUser);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
+        dispatcher.forward(req, resp);
+    }
+
+    private void sortByName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
+        List<User> listUser = userDAO.sortByName();
         req.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(req, resp);

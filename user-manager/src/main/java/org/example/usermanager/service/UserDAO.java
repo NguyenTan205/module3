@@ -17,8 +17,11 @@ public class UserDAO implements IUserDAO {
     private static final String SELECT_ALL_USERS = "select * from users";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?";
     private static final String UPDATE_USERS_SQL = "update users set name = ?, email = ?, country = ? where id = ?";
+    private static final String SEARCH_BY_COUNTRY = "select * from users where country like";
+    private static final String SORT_BY_NAME = "select * from users order by name asc";
 
-    public UserDAO() {}
+    public UserDAO() {
+    }
 
     protected Connection getConnection() {
         Connection connection = null;
@@ -129,13 +132,80 @@ public class UserDAO implements IUserDAO {
         }
     }
 
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        Connection conn = dao.getConnection();
-        if (conn != null) {
-            System.out.println("✅ Kết nối thành công");
-        } else {
-            System.out.println("❌ Kết nối thất bại");
+    @Override
+    public List<User> searchByCountry(String country) throws SQLException {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_BY_COUNTRY)) {
+            preparedStatement.setString(1, "%" + country + "%"); // Tìm gần đúng
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String ctry = rs.getString("country");
+                users.add(new User(id, name, email, ctry));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> sortByName() throws SQLException {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SORT_BY_NAME)) {
+            ResultSet re = preparedStatement.executeQuery();
+            while (re.next()) {
+                int id = re.getInt("id");
+                String name = re.getString("name");
+                String email = re.getString("email");
+                String country = re.getString("country");
+                users.add(new User(id, name, email, country));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return users;
+    }
+
+    @Override
+    public User getUserById(int id) throws SQLException {
+        User user = null;
+        String query = "{CALL get_user_by_id(?)}";
+
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(query)) {
+            callableStatement.setInt(1, id);
+            ResultSet rs = callableStatement.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String country = rs.getString("country");
+                user = new User(id, name, email, country);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return user;
+    }
+
+    @Override
+    public void insertUserStore(User user) throws SQLException {
+        String query = "{CALL insert_user(?,?,?)}";
+
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(query);) {
+            callableStatement.setString(1, user.getName());
+            callableStatement.setString(2, user.getEmail());
+            callableStatement.setString(3, user.getCountry());
+            System.out.println(callableStatement);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
         }
     }
 }
