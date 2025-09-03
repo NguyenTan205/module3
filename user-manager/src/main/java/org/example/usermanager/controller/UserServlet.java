@@ -35,6 +35,9 @@ public class UserServlet extends HttpServlet {
                 case "edit":
                     updateUser(req, resp);
                     break;
+                case "test-without-tran":
+                    testWithoutTran(req, resp);
+                    break;
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
@@ -104,16 +107,16 @@ public class UserServlet extends HttpServlet {
         String delete = req.getParameter("delete");
         String view = req.getParameter("view");
         List<Integer> permissions = new ArrayList<>();
-        if (add != null){
+        if (add != null) {
             permissions.add(1);
         }
-        if (edit != null){
+        if (edit != null) {
             permissions.add(2);
         }
-        if (delete != null){
+        if (delete != null) {
             permissions.add(3);
         }
-        if (view != null){
+        if (view != null) {
             permissions.add(4);
         }
 
@@ -159,5 +162,9 @@ public class UserServlet extends HttpServlet {
         req.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(req, resp);
+    }
+
+    private void testWithoutTran(HttpServletRequest request, HttpServletResponse response) {
+        userDAO.insertUpdateWithoutTransaction();
     }
 }
