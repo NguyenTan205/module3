@@ -5,6 +5,7 @@ import org.example.usermanager.service.UserDAO;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -97,9 +98,28 @@ public class UserServlet extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String country = req.getParameter("country");
+
+        String add = req.getParameter("add");
+        String edit = req.getParameter("edit");
+        String delete = req.getParameter("delete");
+        String view = req.getParameter("view");
+        List<Integer> permissions = new ArrayList<>();
+        if (add != null){
+            permissions.add(1);
+        }
+        if (edit != null){
+            permissions.add(2);
+        }
+        if (delete != null){
+            permissions.add(3);
+        }
+        if (view != null){
+            permissions.add(4);
+        }
+
         User newUser = new User(name, email, country);
-//        userDAO.insertUser(newUser);
-        userDAO.insertUserStore(newUser);
+        //userDAO.insertUser(newUser);
+        userDAO.addUserTransaction(newUser, permissions);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         dispatcher.forward(req, resp);
     }
